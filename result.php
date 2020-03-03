@@ -8,26 +8,41 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <link type="text/css" rel="stylesheet" href="style.css">   
 <body>
-    <?php include 'connection.php';?>
-    <div class="img-container">
-        <img src="academy_logo.png" width="300" height="300" >
-    </div> 
-    <div class=" form_div">
-    <form method="post" action="#">
-        First name: <input type="text" name="fname"><br>
-        Last name: <input type="text" name="lname"><br>
-        <input type="submit">
-    </form>
-    </div>
-    
-    <?php 
-        $data = "Select * from users";
-        $result = $conn->query($data);
-        if($result->num_rows > 0){
-            while($row = mysqli_fetch_assoc($result)){
-                echo "First Name: ".$row['firstname']. " and Lastname: ". $row['lastname']."<br>";
-            }
+<?php include 'connection.php';?>
+<div class="img-container">
+    <img src="academy_logo.png" width="300" height="300" >
+</div> 
+<div class=" form_div">
+<form method="post" action="#">
+    First name: <input type="text" name="fname"><br>
+    Last name: <input type="text" name="lname"><br>
+    <input type="submit">
+</form>
+</div>
+
+  <?php
+    if ($_SERVER["REQUEST_METHOD"]== "POST"){
+        $firstname = $_POST['fname'];
+        $lastname  = $_POST['lname'];
+        if(empty($firstname) || empty($lastname)){
+            echo "Please enter name and lastname";
+        }else{
+            echo  "Hi there! " .$firstname ." " . $lastname;
         }
-        ?>
+    }
+        
+    ?>
+<?php 
+    $data = "Select * from users";
+    $result = $conn->query($data);
+    if($result->num_rows > 0){
+        echo "<table><tr><th>Firstname</th><th>Lastname</th></tr>";
+        while($row = mysqli_fetch_assoc($result)){
+            echo "<tr><td>".$row['firstname']."</td><td>".$row['lastname']."</td></tr>";
+        }
+    }
+    
+    
+    ?>
 </body>
 </html>
